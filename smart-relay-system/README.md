@@ -1,3 +1,19 @@
+
+# Smart Relay System - Frontend
+
+Smart Relay System adalah platform manajemen IoT yang memungkinkan pengguna untuk mengendalikan dan memantau perangkat relay secara remote melalui antarmuka web modern. Sistem ini terintegrasi dengan backend API, MQTT broker, dan menyediakan fitur real-time monitoring, kontrol perangkat, serta sistem notifikasi.
+
+## Fitur Utama
+
+- **Dashboard Real-time**: Monitoring status perangkat dan kontrol relay secara langsung dari web.
+- **Integrasi MQTT**: Komunikasi dua arah dengan perangkat IoT melalui MQTT broker.
+- **Manajemen Perangkat**: Tambah, edit, hapus, dan kontrol perangkat relay.
+- **Notifikasi**: Mendapatkan notifikasi status perangkat dan event penting.
+- **Autentikasi**: Login user dengan sistem otentikasi JWT.
+- **UI Modern**: Dibangun dengan Next.js, TailwindCSS, dan komponen shadcn/ui.
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
