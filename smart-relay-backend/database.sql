@@ -177,3 +177,64 @@ INSERT INTO system_settings (setting_key, setting_value, setting_type, descripti
 -- Create admin user (password: admin123 - change this!)
 INSERT INTO users (username, email, password_hash, role, status, email_verified) VALUES
 ('admin', 'admin@smartrelay.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 'active', TRUE);
+
+-- API Logs Table
+CREATE TABLE api_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NULL,
+    method VARCHAR(10) NOT NULL,
+    endpoint VARCHAR(255) NOT NULL,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    response_code INT NOT NULL,
+    response_time FLOAT DEFAULT 0,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_user_logs (user_id, timestamp),
+    INDEX idx_endpoint_logs (endpoint, timestamp),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+-- User Activity Logs Table
+CREATE TABLE user_activity_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    activity VARCHAR(100) NOT NULL,
+    data JSON,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_user_activity (user_id, timestamp),
+    INDEX idx_activity_type (activity, timestamp),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Billing Logs Table
+CREATE TABLE billing_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    event_type VARCHAR(50) NOT NULL,
+    data JSON,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_user_billing (user_id, timestamp),
+    INDEX idx_event_type (event_type, timestamp),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Notification Queue Table
+CREATE TABLE notification_queue (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    subject VARCHAR(255),
+    body TEXT,
+    data JSON,
+    status ENUM('pending', 'sent', 'failed') DEFAULT 'pending',
+    attempts INT DEFAULT 0,
+    max_attempts INT DEFAULT 3,
+    scheduled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    sent_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_pending_notifications (status, scheduled_at),
+    INDEX idx_user_notifications (user_id, created_at),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
